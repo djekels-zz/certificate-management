@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+
+my $cmd = shift || die;
+
+my @path = split( /:/, $ENV{PATH} );
+
+for (@path){
+	$_ .= "/cert-" . $cmd . "*";
+}
+
+my @cmd = grep { -x $_ } glob join(" ", @path);
+
+exit unless @cmd;
+
+my $c = $cmd[0];
+
+system( "$c @ARGV" );
